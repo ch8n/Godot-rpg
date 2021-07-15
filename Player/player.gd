@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
-const ACCELERATION_RATE = 10
+const ACCELERATION_RATE = 100
 const MAX_PLAYER_SPEED = 100
-const FRICTION_RATE = 2.5
+const FRICTION_RATE = 80
 
 func _ready():
 	print("Hello godot!")
@@ -16,9 +16,8 @@ func _physics_process(delta):
 	direction = direction.normalized()
 
 	if direction != Vector2.ZERO :
-		velocity += direction * ACCELERATION_RATE * delta
-		velocity = velocity.clamped(MAX_PLAYER_SPEED * delta)
+		velocity = velocity.move_toward(direction * MAX_PLAYER_SPEED, ACCELERATION_RATE * delta)
 	else :
 		velocity = velocity.move_toward(Vector2.ZERO,FRICTION_RATE * delta)
 	print(velocity)
-	move_and_collide(velocity)
+	velocity = move_and_slide(velocity)
